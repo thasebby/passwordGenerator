@@ -1,94 +1,123 @@
  // Assignment code here
-document.getElementById("generate").addEventListener("click",writePassword())
+document.getElementById("generate").addEventListener("click",writePassword);
 
-function generatePassword(){
-  makePassword();
-}
-
-function makePassword(){
-  passwordLength();
-  randomLower();
-  randomUpper();
-
-  var passwordHolder = ' ';
-  
-  for (let index = 0; index < passwordLength ; index++) {
-    if(randomLower() == true){
-      passwordHolder.append(randomLower());
-    }
-  
-    if(randomUpper() == true){
-      passwordHolder.append(randomUpper());
-    }
-  }
-  console.log(passwordHolder);
-
-}
-
-//takes in the length that the user wants and does the password generation
-function passwordLength() {
-  const passwordLength = prompt("How long do you want your password to be? (Has to be more than 8 characters and no more than 128)");
-
-  if(passwordLength > 8 && passwordLength <= 128 ) {
-      
-  }
-  else if(passwordLength < 8){
-    window.alert("Not enough characters!");
-  }
-  else{
-    window.alert("Too many characters!");
-  }
-
-  return passwordLength;
-
-}
-
+//declaring global varaible
+var passLength;
+var includeLower;
+var includeUpper;
+var includeNumber;
+var includeSymbols;
 
 //generates random lower case letter
 function randomLower(){
-  if(confirm("Do you want lowercase letters?") == true){
+  if(includeLower == true){
     const lowerCase = "abcdefghijklmnopqrstuvwxyz";
     return lowerCase [Math.floor(Math.random() * lowerCase.length)];      
   }
   else{
-    return;
+    return false;
   }
 }
 
 //generates random upper case letter
 function randomUpper(){
-  if(confirm("Do you want uppercase letters?") == true){
+  if(includeUpper == true){
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return upperCase [Math.floor(Math.random() * upperCase.length)];
   }
   else{
-    return;
+    return false;
   }
 } 
 
 //generates random number
 function randomNumber(){
-  if(confirm("Do you want random numbers?") == true){
+  if(includeNumber == true){
     const num = "0123456789";
     return num [Math.floor(Math.random() * num.length)];
   }
   else{
-    return;
+    return false;
   }
 }
 
 //generates random symbol
 function randomSymbol(){
-  if(confirm("Do you want random symbols?") == true){
+  if(includeSymbols == true){
     const symbols = "!@#$%*?+_-&"
     return symbols [Math.floor(Math.random() * symbols.length)];
   }
   else{
-    return;
+    return false;
   }
 }
 
+//ask user preferences
+function getUserPreferences(){
+  passLength = prompt("How long do you want your password to be ? (Must be more than 8 letters and less than 128");
 
+  if(isNaN(passLength)){
+    window.alert("Not a number!");
+    return false;
+  }
+  else if(passLength < 8){
+    window.alert("Not enough characters!");
+    return false;
+  }
+  else if(passLength > 128){
+    window.alert("Too many characters!");
+    return false;
+  }
+
+  includeLower = confirm("Do you want to include lowercase letters?");
+  includeUpper = confirm("Do you want to include uppercase letters?");
+  includeNumber = confirm("Do you want to include numbers?");
+  includeSymbols = confirm("Do you want to include symbols?");
+
+  return true;
+}
+
+//generate a password with all the information from above
+function generatePassword(){
+  if(getUserPreferences() == false){
+    return ' ';
+  }  
+  var password = ' ';
+  var possibleFunctions = [ ];
+
+  if(includeLower == true){
+    possibleFunctions += randomLower();
+  }
+
+  if(includeUpper == true){
+    possibleFunctions += randomUpper();
+  }
+
+  if(includeNumber == true){
+    possibleFunctions += randomNumber();
+  }
+
+  if(includeSymbols == true){
+    possibleFunctions += randomSymbol();
+  }
+
+  console.log(possibleFunctions);
+
+  if(possibleFunctions == ' '){
+    window.alert("Please select at least one character type.");
+    return ' ';
+  }
+
+  for (let i = 0; i < passLength; i++) {
+    for (let j =0; j < possibleFunctions.length; j++){
+      password += possibleFunctions[j];
+    }
+  }
+
+  return password;
+
+}
+ 
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
