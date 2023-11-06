@@ -1,7 +1,7 @@
  // Assignment code here
 document.getElementById("generate").addEventListener("click",writePassword);
 
-//declaring global varaible
+//declaring global varaibles
 var passLength;
 var includeLower;
 var includeUpper;
@@ -85,33 +85,32 @@ function generatePassword(){
   var password = ' ';
   var possibleFunctions = [ ];
 
-  if(includeLower == true){
-    possibleFunctions += randomLower();
+  //for loop pushes information into the array for the desired length
+  for(let i = 0; i < passLength ; i++){
+
+    if(includeLower == true){
+      possibleFunctions.push(randomLower());
+    }
+
+    if(includeUpper == true){
+      possibleFunctions.push(randomUpper());
+    }
+
+    if(includeNumber == true){
+      possibleFunctions.push(randomNumber());
+    }
+
+    if(includeSymbols == true){
+      possibleFunctions.push(randomSymbol());
+    }
+    
+    password += possibleFunctions[i];
   }
 
-  if(includeUpper == true){
-    possibleFunctions += randomUpper();
-  }
-
-  if(includeNumber == true){
-    possibleFunctions += randomNumber();
-  }
-
-  if(includeSymbols == true){
-    possibleFunctions += randomSymbol();
-  }
-
-  console.log(possibleFunctions);
-
-  if(possibleFunctions == ' '){
+  //checks if user did not select any of the randomized options
+  if(possibleFunctions == 0){
     window.alert("Please select at least one character type.");
     return ' ';
-  }
-
-  for (let i = 0; i < passLength; i++) {
-    for (let j =0; j < possibleFunctions.length; j++){
-      password += possibleFunctions[j];
-    }
   }
 
   return password;
